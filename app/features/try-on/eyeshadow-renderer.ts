@@ -79,8 +79,10 @@ export function createEyeshadowRenderer() {
         p.save();
         const opacity = Math.min(0.43, 0.1 + intensity * 0.54);
         p.globalAlpha = opacity;
+        p.filter = "saturate(1.15)";
         p.fillStyle = color;
         p.fillRect(0, 0, bufferWidth, bufferHeight);
+        p.filter = "none";
         if (shimmer) {
           const sheen = p.createRadialGradient(padding + span * 0.48, baseline - span * 0.15, 0, padding + span * 0.48, baseline - span * 0.15, span * 0.42);
           sheen.addColorStop(0, "rgba(255,244,228,0.38)");
