@@ -27,6 +27,7 @@ The camera works on localhost or an HTTPS host. Allow camera permission when pro
 - One Illumina product card with the original artwork, description and swatch chart.
 - Ten selectable shades from the original chart: 001 Moonshell, 002 Blush Quartz, 003 Zenith, 004 Peach Pearl, 005 Bronzite, 006 Topaz, 007 Rose Stone, 008 Chromite, 009 Diamond, 010 Amethyst.
 - Eyeshadow application with the existing shimmer renderer.
+- Eyelid contours follow each eye's rotation and scale, taper at the corners and reserve the brow gap. A feathered mask excludes the eye opening and clips the fine shimmer to the lid.
 - Camera try-on with shade selection, intensity, effect comparison, camera switch, aspect ratio, fullscreen and photo capture.
 - English is the page and interface language.
 - MediaPipe model and WASM files are included under `public/vendor/mediapipe/`; `next.config.ts` routes the versioned camera asset URLs.

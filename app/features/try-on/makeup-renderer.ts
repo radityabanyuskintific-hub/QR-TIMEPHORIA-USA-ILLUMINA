@@ -1,5 +1,6 @@
 import type { NormalizedLandmark } from "@mediapipe/tasks-vision";
 import { createLipRenderer } from "./lip-renderer";
+import { createEyeshadowRenderer } from "./eyeshadow-renderer.ts";
 import type { TryOnPreset } from "./try-on-presets";
 
 type DrawOptions = {
@@ -30,16 +31,6 @@ function path(context: CanvasRenderingContext2D, points: NormalizedLandmark[], i
     const next = point(points, index, width, height);
     context.lineTo(next.x, next.y);
   }
-}
-
-function eyeShadowPath(context: CanvasRenderingContext2D, points: NormalizedLandmark[], eye: number[], brow: number[], width: number, height: number) {
-  path(context, points, eye, width, height);
-  for (const index of [...brow].reverse()) {
-    const browPoint = point(points, index, width, height);
-    const eyeCenterY = eye.reduce((sum, eyeIndex) => sum + points[eyeIndex].y, 0) / eye.length * height;
-    context.lineTo(browPoint.x, browPoint.y + (eyeCenterY - browPoint.y) * 0.42);
-  }
-  context.closePath();
 }
 
 function fillSoft(
@@ -92,27 +83,6 @@ function featheredOval(
   context.restore();
 }
 
-function drawSparkles(context: CanvasRenderingContext2D, points: NormalizedLandmark[], eye: number[], width: number, height: number, time: number, intensity: number) {
-  const eyePoints = eye.map((index) => point(points, index, width, height));
-  const minX = Math.min(...eyePoints.map((item) => item.x));
-  const maxX = Math.max(...eyePoints.map((item) => item.x));
-  const minY = Math.min(...eyePoints.map((item) => item.y)) - (maxX - minX) * 0.24;
-  const maxY = Math.max(...eyePoints.map((item) => item.y));
-  context.save();
-  context.globalCompositeOperation = "screen";
-  for (let index = 0; index < 14; index += 1) {
-    const x = minX + ((index * 37) % 97) / 97 * (maxX - minX);
-    const y = minY + ((index * 61) % 89) / 89 * (maxY - minY);
-    const pulse = 0.25 + 0.75 * Math.abs(Math.sin(time / 260 + index * 1.73));
-    context.globalAlpha = pulse * intensity * 1.8;
-    context.fillStyle = index % 3 === 0 ? "#ffe1f0" : "#fff8d5";
-    context.beginPath();
-    context.arc(x, y, Math.max(0.8, (maxX - minX) * 0.012 * pulse), 0, Math.PI * 2);
-    context.fill();
-  }
-  context.restore();
-}
-
 function drawLashes(
   context: CanvasRenderingContext2D,
   points: NormalizedLandmark[],
@@ -143,6 +113,7 @@ function drawLashes(
 
 export function createMakeupRenderer() {
   const lipRenderer = createLipRenderer();
+  let eyeshadowRenderer: ReturnType<typeof createEyeshadowRenderer> | undefined;
 
   return {
     draw(context: CanvasRenderingContext2D, points: NormalizedLandmark[], width: number, height: number, options: DrawOptions) {
@@ -263,14 +234,8 @@ export function createMakeupRenderer() {
         drawLashes(context, points, LEFT_EYE, width, height, options.shadeHex, options.intensity);
         drawLashes(context, points, RIGHT_EYE, width, height, options.shadeHex, options.intensity);
       } else if (options.preset.region === "eyeshadow") {
-        fillSoft(context, options.shadeHex, alpha, 5, () => {
-          eyeShadowPath(context, points, LEFT_EYE, LEFT_BROW, width, height);
-          eyeShadowPath(context, points, RIGHT_EYE, RIGHT_BROW, width, height);
-        });
-        if (options.preset.shimmer) {
-          drawSparkles(context, points, LEFT_EYE, width, height, options.time, options.intensity);
-          drawSparkles(context, points, RIGHT_EYE, width, height, options.time, options.intensity);
-        }
+        eyeshadowRenderer ??= createEyeshadowRenderer();
+        eyeshadowRenderer.draw(context, points, width, height, options.shadeHex, options.intensity, Boolean(options.preset.shimmer));
       }
     },
   };
