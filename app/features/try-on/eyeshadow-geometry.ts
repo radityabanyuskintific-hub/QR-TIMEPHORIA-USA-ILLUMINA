@@ -41,12 +41,12 @@ export function eyelidGeometry(points: NormalizedLandmark[], eye: EyeDefinition,
   const top = lid.map(p => {
     const nearestBrow = brow.reduce((nearest, candidate) => Math.abs(candidate.x - p.x) < Math.abs(nearest.x - p.x) ? candidate : nearest);
     const gap = Math.max(0, nearestBrow.y - p.y);
-    const taper = Math.sin(Math.PI * Math.min(1, Math.max(0, p.x))) ** 0.8;
-    // Reserve most of the lid-to-brow gap, including on hooded eyes.
-    const lift = Math.min(0.13, gap * 0.38) * taper * (1.08 - p.x * 0.22);
+    const taper = Math.sin(Math.PI * Math.min(1, Math.max(0, p.x))) ** 0.55;
+    // Fill the mobile lid while reserving a clear margin below the brow.
+    const lift = Math.min(0.24, gap * 0.68) * taper * (1.08 - p.x * 0.22);
     return { x: p.x, y: p.y + lift };
   });
-  return { origin, axis, normal, span, lid, top, aperture: [...lid, ...eye.lower.map(local)] };
+  return { origin, axis, normal, span, lid, top, brow, aperture: [...lid, ...eye.lower.map(local)] };
 }
 
 export type EyelidGeometry = NonNullable<ReturnType<typeof eyelidGeometry>>;

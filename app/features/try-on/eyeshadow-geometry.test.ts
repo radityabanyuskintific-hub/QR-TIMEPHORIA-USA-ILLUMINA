@@ -16,10 +16,15 @@ function fixture(angle = 0, scale = 1, opening = 1, browHeight = 0.34, mirrored 
   return eyelidGeometry(points, eye, 600, 600);
 }
 
-test("eyeshadow stays next to the upper lid and leaves the brow gap clear", () => {
+test("eyeshadow covers the lid rather than a lash-line strip, leaving the brow gap clear", () => {
   const geometry = fixture();
   assert.ok(geometry);
-  assert.ok(Math.max(...geometry.top.map(p => p.y)) < 0.24);
+  const center = 4;
+  const lift = geometry.top[center].y - geometry.lid[center].y;
+  const gap = 0.34 - geometry.lid[center].y;
+  assert.ok(lift > 0.14, "The central wash must have eyeshadow-sized coverage");
+  assert.ok(lift / gap > 0.55 && lift / gap < 0.75);
+  assert.ok(Math.max(...geometry.top.map(p => p.y)) < 0.3);
   assert.ok(Math.abs(geometry.top[0].y - geometry.lid[0].y) < 1e-8);
   assert.ok(Math.abs(geometry.top.at(-1)!.y - geometry.lid.at(-1)!.y) < 1e-8);
   for (let i = 0; i < geometry.lid.length; i++) {
@@ -45,7 +50,7 @@ test("placement follows eye rotation, scale and left/right mirroring", () => {
 
 test("a lower brow reduces coverage, and blinking never flips the mask across the lid", () => {
   const lowBrow = fixture(0, 1, 1, 0.14)!;
-  assert.ok(lowBrow.top[4].y - lowBrow.lid[4].y < 0.02);
+  assert.ok(lowBrow.top[4].y - lowBrow.lid[4].y < 0.03);
   for (const opening of [0, 0.1, 0.5, 1]) {
     const geometry = fixture(0, 1, opening)!;
     assert.ok(geometry.top.every((p, i) => p.y >= geometry.lid[i].y));

@@ -21,7 +21,7 @@ export function createEyeshadowRenderer() {
       for (const eye of EYES) {
         const geometry = eyelidGeometry(points, eye, width, height);
         if (!geometry) continue;
-        const { origin, axis, normal, span, lid, top, aperture } = geometry;
+        const { origin, axis, normal, span, lid, top, brow, aperture } = geometry;
         const padding = Math.ceil(span * 0.12);
         const maxY = Math.max(...top.map(p => p.y), 0.2);
         const bufferWidth = Math.ceil(span + padding * 2);
@@ -38,8 +38,13 @@ export function createEyeshadowRenderer() {
         m.clearRect(0, 0, bufferWidth, bufferHeight);
         m.save();
         m.setTransform(span, 0, 0, -span, padding, baseline);
-        m.filter = `blur(${Math.max(0.6, span * 0.018)}px)`;
-        m.fillStyle = "#fff";
+        m.filter = `blur(${Math.max(0.8, span * 0.025)}px)`;
+        const edgeFade = m.createLinearGradient(0, maxY, 0, 0);
+        edgeFade.addColorStop(0, "rgba(255,255,255,0.2)");
+        edgeFade.addColorStop(0.32, "rgba(255,255,255,0.85)");
+        edgeFade.addColorStop(0.7, "#fff");
+        edgeFade.addColorStop(1, "#fff");
+        m.fillStyle = edgeFade;
         m.beginPath();
         curve(m, lid, true);
         curve(m, [...top].reverse(), false);
@@ -56,12 +61,23 @@ export function createEyeshadowRenderer() {
         m.lineJoin = "round";
         m.strokeStyle = "#fff";
         m.stroke();
+        // Feathering must not cross onto low brows when the lid wash gets wider.
+        const browEdge = brow.map(p => ({ x: p.x, y: p.y - 0.035 })).sort((a, b) => a.x - b.x);
+        m.fillStyle = "#fff";
+        m.beginPath();
+        m.moveTo(-1, 2);
+        m.lineTo(-1, browEdge[0].y);
+        curve(m, browEdge, false);
+        m.lineTo(2, browEdge[browEdge.length - 1].y);
+        m.lineTo(2, 2);
+        m.closePath();
+        m.fill();
         m.restore();
 
         p.resetTransform();
         p.clearRect(0, 0, bufferWidth, bufferHeight);
         p.save();
-        const opacity = Math.min(0.38, 0.08 + intensity * 0.46);
+        const opacity = Math.min(0.43, 0.1 + intensity * 0.54);
         p.globalAlpha = opacity;
         p.fillStyle = color;
         p.fillRect(0, 0, bufferWidth, bufferHeight);
