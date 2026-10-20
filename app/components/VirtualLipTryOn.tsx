@@ -81,7 +81,7 @@ const COPY = {
     intensity: "INTENSIDAD",
     lashes: "PESTAÑAS",
     loading: "PREPARANDO LA PRUEBA...",
-    look: "LOOK ACTIVO",
+    look: "MAQUILLAJE ACTIVO",
     lips: "LABIOS",
     brows: "CEJAS",
     resetLook: "RESTABLECER",
