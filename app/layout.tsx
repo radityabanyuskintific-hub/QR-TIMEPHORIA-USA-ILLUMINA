@@ -16,7 +16,7 @@ const isVercelDeployment = process.env.VERCEL === "1";
 export const metadata: Metadata = {
   title: "Timephoria | Illumina Eyeshadow Stick",
   description:
-    "Explore Illumina Eyeshadow Stick and try on the ten chart shades with your camera.",
+    "Descubre Illumina Eyeshadow Stick y prueba con tu cámara los diez tonos de la carta.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -32,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es-MX">
       <body className={`${montserrat.variable} antialiased`}>
         {children}
         {isVercelDeployment ? (

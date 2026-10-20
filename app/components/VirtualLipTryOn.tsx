@@ -64,32 +64,32 @@ type VirtualTryOnProps = {
 };
 
 const COPY = {
-    approximation: "Shade visualization only. Results vary with lighting and screen settings.",
-    backCamera: "Back camera active",
-    cameraHint: "Allow camera access when your browser asks.",
-    capture: "CAPTURE",
-    captured: "PHOTO SAVED",
-    close: "Close virtual try-on",
-    effectOff: "VIEW WITHOUT EFFECT",
-    effectOn: "EFFECT ON",
-    eyes: "EYES",
-    face: "FACE",
-    error: "Virtual try-on could not start. Check your connection and camera permission.",
-    flipCamera: "Switch front or back camera",
-    frontCamera: "Front camera active",
-    fullscreen: "Toggle fullscreen",
-    intensity: "INTENSITY",
-    lashes: "LASHES",
-    loading: "PREPARING TRY-ON...",
-    look: "ACTIVE LOOK",
-    lips: "LIPS",
-    brows: "BROWS",
-    resetLook: "RESET",
-    studioTitle: "FULL LOOK STUDIO",
-    retry: "TRY AGAIN",
-    shade: "SHADE",
-    intensityLevels: ["LOW", "MEDIUM", "HIGH"],
-    title: "TRY IT ON YOUR FACE",
+    approximation: "Los tonos son orientativos. El resultado varía según la luz y la pantalla.",
+    backCamera: "Cámara trasera activa",
+    cameraHint: "Permite el acceso a la cámara cuando lo solicite el navegador.",
+    capture: "TOMAR FOTO",
+    captured: "FOTO GUARDADA",
+    close: "Cerrar prueba virtual",
+    effectOff: "VER SIN EFECTO",
+    effectOn: "EFECTO ACTIVADO",
+    eyes: "OJOS",
+    face: "ROSTRO",
+    error: "No se pudo iniciar la prueba virtual. Revisa tu conexión y el permiso de la cámara.",
+    flipCamera: "Cambiar entre cámara frontal y trasera",
+    frontCamera: "Cámara frontal activa",
+    fullscreen: "Activar o desactivar pantalla completa",
+    intensity: "INTENSIDAD",
+    lashes: "PESTAÑAS",
+    loading: "PREPARANDO LA PRUEBA...",
+    look: "LOOK ACTIVO",
+    lips: "LABIOS",
+    brows: "CEJAS",
+    resetLook: "RESTABLECER",
+    studioTitle: "ESTUDIO DE MAQUILLAJE",
+    retry: "INTENTAR DE NUEVO",
+    shade: "TONO",
+    intensityLevels: ["BAJA", "MEDIA", "ALTA"],
+    title: "PRUÉBALO EN TU ROSTRO",
 };
 
 export default function VirtualLipTryOn({
@@ -282,7 +282,7 @@ export default function VirtualLipTryOn({
       stopEverything();
       const errorName = error instanceof DOMException ? error.name : "";
       const message = errorName === "NotAllowedError"
-        ? "Camera access was denied. Allow it in browser settings, then try again."
+        ? "Se denegó el acceso a la cámara. Actívalo en el navegador e inténtalo de nuevo."
         : copy.error;
       if (mountedRef.current) {
         setErrorMessage(message);
@@ -493,7 +493,7 @@ export default function VirtualLipTryOn({
 
   return (
     <section
-      aria-label={`${isStudio ? "Timephoria Full Look Studio" : activeProductDisplayName}, virtual try-on`}
+      aria-label={`${isStudio ? "Estudio de maquillaje Timephoria" : activeProductDisplayName}, prueba virtual`}
       aria-modal="true"
       className={`virtual-tryon ${isStudio ? "studio" : ""} ${isClosing ? "closing" : ""} ${isFullscreen ? "fullscreen" : ""}`}
       data-engine="mediapipe"
@@ -507,7 +507,7 @@ export default function VirtualLipTryOn({
           <canvas aria-hidden="true" className="tryon-canvas" ref={canvasRef} />
         </div>
 
-        <header className="tryon-floating-nav" aria-label="Virtual try-on controls">
+        <header className="tryon-floating-nav" aria-label="Controles de la prueba virtual">
           <button aria-pressed={cameraRatio === "9:16"} onClick={() => setCameraRatio("9:16")} type="button">9:16</button>
           <button aria-pressed={cameraRatio === "4:5"} onClick={() => setCameraRatio("4:5")} type="button">4:5</button>
           <button aria-label={copy.flipCamera} disabled={status !== "running"} onClick={() => void switchCamera()} title={cameraFacing === "user" ? copy.frontCamera : copy.backCamera} type="button">↻</button>
@@ -539,7 +539,7 @@ export default function VirtualLipTryOn({
             ) : null}
 
             {isRevela ? (
-              <div className="tryon-mode-switch" aria-label="Revela application mode">
+              <div className="tryon-mode-switch" aria-label="Modo de aplicación de Revela">
                 <button aria-pressed={revelaMode === "brows"} onClick={() => selectRevelaMode("brows")} type="button">{copy.brows}</button>
                 <button aria-pressed={revelaMode === "eyelashes"} onClick={() => selectRevelaMode("eyelashes")} type="button">{copy.lashes}</button>
               </div>

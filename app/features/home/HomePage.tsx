@@ -12,10 +12,10 @@ import { tryOnPresets } from "../try-on/try-on-presets";
 
 const copy = {
   appLabel: "Illumina Eyeshadow Stick",
-  brandDescription: "Developed with advanced technology in a future-facing beauty universe, based on Timephoria product education materials.",
-  brandLabel: "Timephoria brand story",
-  brandTagline: "Beauty beyond limits",
-  loading: "LOADING...",
+  brandDescription: "Desarrollado con tecnología avanzada en un universo de belleza inspirado en el futuro, a partir de materiales informativos de Timephoria.",
+  brandLabel: "Historia de la marca Timephoria",
+  brandTagline: "Belleza sin límites",
+  loading: "CARGANDO...",
 };
 
 export default function Home() {

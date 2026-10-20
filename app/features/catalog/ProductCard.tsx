@@ -15,15 +15,15 @@ type ProductCardProps = {
 };
 
 const cardCopy = {
-  claims: "claims",
-  finishAndShades: "TAP TO SEE THE FINISH AND SHADES",
-  liveCamera: "LIVE CAMERA",
-  productImage: "product image",
-  swatch: "Tap to see swatches",
-  swatchSlides: "Swatch slides",
-  swatches: "swatch",
-  toneChart: "Tone chart",
-  tryOn: { eyes: "TRY IT ON", face: "TRY IT ON", lips: "TRY IT ON" },
+  claims: "beneficios",
+  finishAndShades: "TOCA PARA VER EL ACABADO Y LOS TONOS",
+  liveCamera: "CÁMARA EN VIVO",
+  productImage: "imagen del producto",
+  swatch: "Toca para ver las muestras",
+  swatchSlides: "Galería de muestras",
+  swatches: "muestra",
+  toneChart: "Carta de tonos",
+  tryOn: { eyes: "PRUÉBALO", face: "PRUÉBALO", lips: "PRUÉBALO" },
 };
 
 export default function ProductCard({
